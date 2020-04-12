@@ -2,18 +2,28 @@ package com.androar.fitly
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Movie
 import android.os.Bundle
 import android.provider.CallLog
 import android.provider.CallLog.Calls.*
 import android.provider.ContactsContract
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.json.JSONArray
+import org.json.JSONException
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,17 +38,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val recyclerView = findViewById(R.id.rvActivities) as RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-        val activites = ArrayList<RecyclerItemActivities>()
-        //adding some dummy data to the list
-        activites.add(RecyclerItemActivities("Belal Khan", "Ranchi Jharkhand"))
-        activites.add(RecyclerItemActivities("Ramiz Khan", "Ranchi Jharkhand"))
-        activites.add(RecyclerItemActivities("Faiz Khan", "Ranchi Jharkhand"))
-        activites.add(RecyclerItemActivities("Yashar Khan", "Ranchi Jharkhand"))
-        val adapter = RecyclerItemActivitesAdapter(activites)
-        recyclerView.adapter = adapter
+        loadDummyData()
+        populateActivities();
 
         if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) && (checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID))) {
             val rvContacts = findViewById(R.id.rvPhoneList) as RecyclerView
@@ -107,6 +108,48 @@ class MainActivity : AppCompatActivity() {
         val customAdapter = RecyclerPhoneListAdapter(contactModelArrayList!!)
         rvContacts!!.adapter = customAdapter
 
+    }
+
+    private fun populateActivities() {
+        val recyclerView = findViewById(R.id.rvActivities) as RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+
+
+        val arrayList = ArrayList<RecyclerItemActivities>()
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://goforbg.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val api = retrofit.create(Api::class.java)
+        val call = api.getActivities()
+        call.enqueue(object : Callback<List<RecyclerItemActivities>> {
+            override fun onResponse(call: Call<List<RecyclerItemActivities>>, response: Response<List<RecyclerItemActivities>>) {
+                val activitesList = response.body()!!
+                for (i in activitesList.indices) {
+                    arrayList.add(RecyclerItemActivities(activitesList[i].n, activitesList[i].t, activitesList[i].i, activitesList[i].e, activitesList[i].v, activitesList[i].d))
+                }
+                val adapter = RecyclerItemActivitesAdapter(arrayList)
+                recyclerView.adapter = adapter
+            }
+
+            override fun onFailure(call: Call<List<RecyclerItemActivities>>, t: Throwable) {
+                Log.d("RetrofitTest", t.toString())
+
+                Toast.makeText(applicationContext, "Your internet is moo!", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
+    fun loadDummyData() {
+        val recyclerView = findViewById(R.id.rvActivities) as RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        val arrayList = ArrayList<RecyclerItemActivities>()
+        arrayList.add(RecyclerItemActivities("","","","","",""))
+        arrayList.add(RecyclerItemActivities("","","","","",""))
+        arrayList.add(RecyclerItemActivities("","","","","",""))
+        val adapter = RecyclerItemActivitesAdapter(arrayList)
+        recyclerView.adapter = adapter
     }
 
 

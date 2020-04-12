@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
-class RecyclerItemActivitesAdapter (val userList: ArrayList<RecyclerItemActivities>) : RecyclerView.Adapter<RecyclerItemActivitesAdapter.ViewHolder>() {
+class RecyclerItemActivitesAdapter (val userList: List<RecyclerItemActivities>) : RecyclerView.Adapter<RecyclerItemActivitesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerItemActivitesAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_activities, parent, false)
@@ -26,6 +27,11 @@ class RecyclerItemActivitesAdapter (val userList: ArrayList<RecyclerItemActiviti
 
         fun bindItems(item: RecyclerItemActivities) {
             val tvActivityURL  = itemView.findViewById(R.id.ivItem) as ImageView
+            Glide.with(itemView.rootView.context)
+                .load(item.t)
+                .placeholder(R.drawable.ic_icon)
+                .into(tvActivityURL)
+
         }
     }
 }
