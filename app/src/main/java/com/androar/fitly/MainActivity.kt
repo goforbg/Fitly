@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
         if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) && (checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID))) {
             val rvContacts = findViewById(R.id.rvPhoneList) as RecyclerView
             rvContacts.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-
             showContacts();
         }
 
