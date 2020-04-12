@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
             val name =  phones.getString(phones.getColumnIndex(CallLog.Calls.CACHED_NAME))
             val phoneNumber = phones.getString(phones.getColumnIndex(CallLog.Calls.NUMBER))
             val contactModel = PhoneListClass(name , phoneNumber)
-            if (!contactModelArrayList!!.contains(contactModel)) {
+            if (!contactModelArrayList!!.contains(contactModel) && !name.equals("")) {
                 contactModelArrayList!!.add(contactModel)
             }
             Log.d("name>>", name + "  " + phoneNumber)
