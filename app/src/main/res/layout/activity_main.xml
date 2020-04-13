@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:scrollbars="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="vertical"
     tools:context=".MainActivity">
 
 
@@ -22,15 +22,15 @@
         android:id="@+id/tvLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/app_name"
+        android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:fontFamily="sans-serif-light"
-        android:textColor="@color/colorPrimary"
-        android:layout_marginTop="22dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/app_name"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvWelcome"
@@ -40,9 +40,9 @@
         android:layout_marginTop="65dp"
         android:fontFamily="sans-serif-thin"
         android:text="Trending Excercises 🔥"
+        android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,26 +65,26 @@
         android:layout_marginTop="15dp"
         android:fontFamily="sans-serif-thin"
         android:text="Call your friend to start 🏋️ "
+        android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rvActivities" />
 
     <TextView
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="25dp"
         android:id="@+id/tvBG"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="15dp"
         android:ellipsize="end"
         android:maxLength="35"
         android:maxLines="1"
         android:text="BG the OG"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvStartWorkingOut" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -94,6 +94,7 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="15dp"
         android:orientation="vertical"
+        android:overScrollMode="never"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvBG" />
 

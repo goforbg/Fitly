@@ -65,8 +65,18 @@ class VideoCallActivity : AppCompatActivity() {
         findViewById<ImageView>(com.androar.fitly.R.id.audioBtn).setVisibility(View.GONE); // set the audio button hidden
         findViewById<ImageView>(com.androar.fitly.R.id.leaveBtn).setVisibility(View.GONE); // set the leave button hidden
         findViewById<ImageView>(com.androar.fitly.R.id.videoBtn).setVisibility(View.GONE); // set the video button hidden
-        val join = findViewById<ImageView>(R.id.joinBtn)
-        join.performClick()
+
+
+        mRtcEngine!!.joinChannel(
+            getString(com.androar.fitly.R.string.agora_access_token),
+            "test",
+            "Extra Optional Data",
+            0
+        ) // if you do not specify the uid, Agora will assign one.
+        setupLocalVideoFeed()
+        findViewById<ImageView>(com.androar.fitly.R.id.audioBtn).setVisibility(View.VISIBLE) // set the audio button hidden
+        findViewById<ImageView>(com.androar.fitly.R.id.leaveBtn).setVisibility(View.VISIBLE) // set the leave button hidden
+        findViewById<ImageView>(com.androar.fitly.R.id.videoBtn).setVisibility(View.VISIBLE) // set the video button hidden
     }
 
     private fun initAgoraEngine() {
@@ -152,29 +162,13 @@ class VideoCallActivity : AppCompatActivity() {
         videoSurface.setVisibility(if (btn.isSelected()) View.GONE else View.VISIBLE)
     }
 
-    // join the channel when user clicks UI button
-    fun onjoinChannelClicked(view: View?) {
-        mRtcEngine!!.joinChannel(
-            getString(com.androar.fitly.R.string.agora_access_token),
-            "test",
-            "Extra Optional Data",
-            0
-        ) // if you do not specify the uid, Agora will assign one.
-        setupLocalVideoFeed()
-        findViewById<ImageView>(com.androar.fitly.R.id.joinBtn).setVisibility(View.GONE) // set the join button hidden
-        findViewById<ImageView>(com.androar.fitly.R.id.audioBtn).setVisibility(View.VISIBLE) // set the audio button hidden
-        findViewById<ImageView>(com.androar.fitly.R.id.leaveBtn).setVisibility(View.VISIBLE) // set the leave button hidden
-        findViewById<ImageView>(com.androar.fitly.R.id.videoBtn).setVisibility(View.VISIBLE) // set the video button hidden
-    }
+
 
     fun onLeaveChannelClicked(view: View?) {
         leaveChannel()
         removeVideo(com.androar.fitly.R.id.floating_video_container)
         removeVideo(com.androar.fitly.R.id.bg_video_container)
-        findViewById<ImageView>(com.androar.fitly.R.id.joinBtn).setVisibility(View.VISIBLE) // set the join button visible
-        findViewById<ImageView>(com.androar.fitly.R.id.audioBtn).setVisibility(View.GONE) // set the audio button hidden
-        findViewById<ImageView>(com.androar.fitly.R.id.leaveBtn).setVisibility(View.GONE) // set the leave button hidden
-        findViewById<ImageView>(com.androar.fitly.R.id.videoBtn).setVisibility(View.GONE) // set the video button hidden
+        finish()
     }
 
     private fun leaveChannel() {

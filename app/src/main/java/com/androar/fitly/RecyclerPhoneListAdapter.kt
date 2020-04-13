@@ -15,6 +15,9 @@ class RecyclerPhoneListAdapter(
     val userList: ArrayList<PhoneListClass>
 ) : RecyclerView.Adapter<RecyclerPhoneListAdapter.ViewHolder>() {
 
+    private val limit = 10
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerPhoneListAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_phonelist, parent, false)
         return ViewHolder(v)
@@ -25,7 +28,13 @@ class RecyclerPhoneListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return userList.size
+        if(userList.size > limit){
+            return limit;
+        }
+        else
+        {
+            return userList.size
+        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
