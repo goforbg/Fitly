@@ -13,19 +13,26 @@ import android.provider.ContactsContract
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.androar.fitly.agora.Constants
+import com.androar.fitly.agora.DialerActivity
+import com.androar.fitly.utils.RtcUtils
+import io.agora.rtm.ErrorInfo
+import io.agora.rtm.ResultCallback
+import io.agora.rtm.RtmClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseCallActivity() {
 
     private val PERMISSION_REQ_ID = 27
     private val REQUESTED_PERMISSIONS =
@@ -52,9 +59,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         val bg = findViewById<TextView>(R.id.tvBG)
-        bg.setOnClickListener {
-            startActivity(Intent(this, VideoCallActivity::class.java))
-        }
+        //startCall()
+
+            startActivity(Intent(this,DialerActivity::class.java))
+
 
     }
 
@@ -211,4 +219,36 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private fun startCall() {
+        val number: Int = 2222
+        val peer = number.toString()
+        val peerSet: MutableSet<String> =
+            HashSet()
+        peerSet.add(peer)
+
+        rtmClient()!!.queryPeersOnlineStatus(peerSet,
+            object :
+                ResultCallback<Map<String?, Boolean?>> {
+                override fun onSuccess(statusMap: Map<String?, Boolean?>) {
+                    val bOnline = statusMap[peer]
+                    if (bOnline != null && bOnline) {
+                        val uid: String =
+                            java.lang.String.valueOf(application().config().getUserId())
+                        val channel = RtcUtils.channelName(uid, peer)
+                        gotoCallingInterface(peer, channel, Constants.ROLE_CALLER)
+                    } else {
+                      Log.d("Big", "Provlem")
+                    }
+                }
+
+                override fun onFailure(errorInfo: ErrorInfo) {
+                    Log.d("Biggest", "Provlem")
+                }
+            })
+    }
+
+
+    override fun rtmClient(): RtmClient? {
+        return application().rtmClient()
+    }
 }

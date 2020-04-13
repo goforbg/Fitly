@@ -1,6 +1,24 @@
 <resources>
     <string name="app_name">Fitly</string>
-    <string name="agora_app_id">f4b928968d274a7f936943441032863c</string>
-    <string name="agora_access_token">006f4b928968d274a7f936943441032863cIABXTSWO4UZnBJH7Ju5qxDrSamAFySlQjefMEIG4d+PFVgx+f9gAAAAAEABEVnw0cXyVXgEAAQBxfJVe</string>
+    <string name="agora_app_id">7e40227a49f14f8389d57b3c1d1f472a</string>
+<!--    <string name="agora_access_token">006f4b928968d274a7f936943441032863cIABXTSWO4UZnBJH7Ju5qxDrSamAFySlQjefMEIG4d+PFVgx+f9gAAAAAEABEVnw0cXyVXgEAAQBxfJVe</string>-->
+
+    <string name="start_call_title">Start Calling Your Friend</string>
+    <string name="main_welcome">Welcome To</string>
+    <string name="app_name_simple" translatable="false">Fit.ly</string>
+    <string name="identifier_format">Your Identifier Code: %d</string>
+    <string name="share_code_hint">Share the code so that others can call you</string>
+    <string name="need_necessary_permissions">Necessary permissions acquired</string>
+
+    <!-- Dial Activity -->
+    <string name="incomplete_dial_number">The number you dialed is incomplete</string>
+    <string name="peer_not_online">Peer has not logged on</string>
+
+    <!-- Calling Activity -->
+    <string name="receiving_call">Incoming&#8230;</string>
+    <string name="calling_out">Calling&#8230;</string>
+
+    <!-- Video Activity -->
+    <string name="message_wrong_number">Wrong Peer number</string>
 
 </resources>

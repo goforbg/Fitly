@@ -68,7 +68,7 @@ class VideoCallActivity : AppCompatActivity() {
 
 
         mRtcEngine!!.joinChannel(
-            getString(com.androar.fitly.R.string.agora_access_token),
+            null,
             "test",
             "Extra Optional Data",
             0

@@ -47,5 +47,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
     implementation "com.squareup.retrofit2:converter-moshi:2.0.0"
+    implementation 'io.agora.rtm:rtm-sdk:1.1.0'
+
 
 }
