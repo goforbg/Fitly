@@ -2,23 +2,22 @@ package com.androar.fitly
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.Movie
+import android.net.Uri
 import android.os.Bundle
 import android.provider.CallLog
 import android.provider.CallLog.Calls.*
 import android.provider.ContactsContract
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.json.JSONArray
-import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,7 +28,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
 
     private val PERMISSION_REQ_ID = 27
-    private val REQUESTED_PERMISSIONS = arrayOf<String>(Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS)
+    private val REQUESTED_PERMISSIONS =
+        arrayOf<String>(Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS)
     private val LOG_TAG = MainActivity::class.java.simpleName
     var selectUsers: ArrayList<ContactsContract.Contacts>? = null
     var phones: Cursor? = null
@@ -41,12 +41,20 @@ class MainActivity : AppCompatActivity() {
         loadDummyData()
         populateActivities();
 
-        if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) && (checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID))) {
+        if (checkSelfPermission(
+                REQUESTED_PERMISSIONS[0],
+                PERMISSION_REQ_ID
+            ) && (checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID))
+        ) {
             val rvContacts = findViewById(R.id.rvPhoneList) as RecyclerView
             rvContacts.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
             showContacts();
         }
 
+        val bg = findViewById<TextView>(R.id.tvBG)
+        bg.setOnClickListener {
+            startActivity(Intent(this, VideoCallActivity::class.java))
+        }
 
     }
 
@@ -79,8 +87,7 @@ class MainActivity : AppCompatActivity() {
                         LOG_TAG,
                         "Need permissions " + Manifest.permission.RECORD_AUDIO.toString() + "/" + Manifest.permission.CAMERA
                     )
-                }
-                else {
+                } else {
                     Log.i(LOG_TAG, "Permission has been granted by user")
                 }
                 // if permission granted, initialize the engine
@@ -92,11 +99,25 @@ class MainActivity : AppCompatActivity() {
     fun showContacts() {
         var contactModelArrayList = ArrayList<PhoneListClass>()
         val projection = arrayOf(CACHED_NAME, NUMBER, TYPE, DATE, DURATION)
-        val phones = contentResolver.query(CallLog.Calls.CONTENT_URI, projection, null, null, CallLog.Calls.DATE + " DESC")
+        val phones = contentResolver.query(
+            CallLog.Calls.CONTENT_URI,
+            null,
+            null,
+            null,
+            CallLog.Calls.DATE + " DESC"
+        )
+        var name: String = "Your friend"
         while (phones!!.moveToNext()) {
-            val name =  phones.getString(phones.getColumnIndex(CallLog.Calls.CACHED_NAME))
             val phoneNumber = phones.getString(phones.getColumnIndex(CallLog.Calls.NUMBER))
-            val contactModel = PhoneListClass(name , phoneNumber)
+            try {
+                name = phones.getString(phones.getColumnIndex(CallLog.Calls.CACHED_NAME))
+            } catch (e: Exception) {
+                Log.e("Phone log error", e.message.toString())
+                name = "Your friend"
+            }
+
+
+            val contactModel = PhoneListClass(name, phoneNumber)
             if (!contactModelArrayList!!.contains(contactModel) && !name.equals("")) {
                 contactModelArrayList!!.add(contactModel)
             }
@@ -108,6 +129,31 @@ class MainActivity : AppCompatActivity() {
         rvContacts!!.adapter = customAdapter
 
     }
+
+    fun contactExists(number: String?): Boolean {
+        /// number is the phone number
+        val lookupUri = Uri.withAppendedPath(
+            ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+            Uri.encode(number)
+        )
+        val mPhoneNumberProjection =
+            arrayOf<String>(
+                ContactsContract.PhoneLookup._ID,
+                ContactsContract.PhoneLookup.NUMBER,
+                ContactsContract.PhoneLookup.DISPLAY_NAME
+            )
+        val cur: Cursor? =
+            contentResolver.query(lookupUri, mPhoneNumberProjection, null, null, null)
+        try {
+            if (cur!!.moveToFirst()) {
+                return true
+            }
+        } finally {
+            cur?.close()
+        }
+        return false
+    }
+
 
     private fun populateActivities() {
         val recyclerView = findViewById(R.id.rvActivities) as RecyclerView
@@ -122,10 +168,22 @@ class MainActivity : AppCompatActivity() {
         val api = retrofit.create(Api::class.java)
         val call = api.getActivities()
         call.enqueue(object : Callback<List<RecyclerItemActivities>> {
-            override fun onResponse(call: Call<List<RecyclerItemActivities>>, response: Response<List<RecyclerItemActivities>>) {
+            override fun onResponse(
+                call: Call<List<RecyclerItemActivities>>,
+                response: Response<List<RecyclerItemActivities>>
+            ) {
                 val activitesList = response.body()!!
                 for (i in activitesList.indices) {
-                    arrayList.add(RecyclerItemActivities(activitesList[i].n, activitesList[i].t, activitesList[i].i, activitesList[i].e, activitesList[i].v, activitesList[i].d))
+                    arrayList.add(
+                        RecyclerItemActivities(
+                            activitesList[i].n,
+                            activitesList[i].t,
+                            activitesList[i].i,
+                            activitesList[i].e,
+                            activitesList[i].v,
+                            activitesList[i].d
+                        )
+                    )
                 }
                 val adapter = RecyclerItemActivitesAdapter(arrayList)
                 recyclerView.adapter = adapter
@@ -134,7 +192,8 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<List<RecyclerItemActivities>>, t: Throwable) {
                 Log.d("RetrofitTest", t.toString())
 
-                Toast.makeText(applicationContext, "Your internet is moo!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Your internet is moo!", Toast.LENGTH_SHORT)
+                    .show()
             }
         })
 
@@ -144,9 +203,9 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById(R.id.rvActivities) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         val arrayList = ArrayList<RecyclerItemActivities>()
-        arrayList.add(RecyclerItemActivities("","","","","",""))
-        arrayList.add(RecyclerItemActivities("","","","","",""))
-        arrayList.add(RecyclerItemActivities("","","","","",""))
+        arrayList.add(RecyclerItemActivities("", "", "", "", "", ""))
+        arrayList.add(RecyclerItemActivities("", "", "", "", "", ""))
+        arrayList.add(RecyclerItemActivities("", "", "", "", "", ""))
         val adapter = RecyclerItemActivitesAdapter(arrayList)
         recyclerView.adapter = adapter
     }

@@ -65,6 +65,8 @@ class VideoCallActivity : AppCompatActivity() {
         findViewById<ImageView>(com.androar.fitly.R.id.audioBtn).setVisibility(View.GONE); // set the audio button hidden
         findViewById<ImageView>(com.androar.fitly.R.id.leaveBtn).setVisibility(View.GONE); // set the leave button hidden
         findViewById<ImageView>(com.androar.fitly.R.id.videoBtn).setVisibility(View.GONE); // set the video button hidden
+        val join = findViewById<ImageView>(R.id.joinBtn)
+        join.performClick()
     }
 
     private fun initAgoraEngine() {
