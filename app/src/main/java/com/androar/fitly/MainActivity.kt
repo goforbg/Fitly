@@ -18,6 +18,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,6 +40,36 @@ class MainActivity : AppCompatActivity() {
     private val LOG_TAG = MainActivity::class.java.simpleName
     var selectUsers: ArrayList<ContactsContract.Contacts>? = null
     var phones: Cursor? = null
+    private val FCM_API = "https://fcm.googleapis.com/fcm/send"
+    private val serverKey =
+        "key=" + "AAAAHDRmp7s:APA91bGx8ODUNDSSlCEtCObiYsbXT5DJFQ2f9xVwC-ENiPahArDtyxGDJGEY1bgKMQlLHDTu-hWwWMSzhNmHgLMg31VTRXtHkupNr3f9xRgl4NwH5ssG_NaqXJmoYGFeIlK3N-xdq_AA"
+    private val contentType = "application/json"
+
+
+    private val requestQueue: RequestQueue by lazy {
+        Volley.newRequestQueue(this.applicationContext)
+    }
+
+    private fun sendNotification(notification: JSONObject) {
+        Log.e("TAG", "sendNotification")
+        val jsonObjectRequest = object : JsonObjectRequest(FCM_API, notification,
+            com.android.volley.Response.Listener<JSONObject> { response ->
+                Log.i("TAG", "onResponse: $response")
+            },
+            com.android.volley.Response.ErrorListener {
+                Toast.makeText(this@MainActivity, "Request error", Toast.LENGTH_LONG).show()
+                Log.i("TAG", "onErrorResponse: Didn't work")
+            }) {
+
+            override fun getHeaders(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["Authorization"] = serverKey
+                params["Content-Type"] = contentType
+                return params
+            }
+        }
+        requestQueue.add(jsonObjectRequest)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +77,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         loadDummyData()
         populateActivities();
+        FirebaseApp.initializeApp(this);
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/bg")
 
         if (checkSelfPermission(
                 REQUESTED_PERMISSIONS[0],
@@ -53,7 +92,22 @@ class MainActivity : AppCompatActivity() {
 
         val bg = findViewById<TextView>(R.id.tvBG)
         bg.setOnClickListener {
-            startActivity(Intent(this, VideoCallActivity::class.java))
+            val topic = "/topics/bg" //topic has to match what the receiver subscribed to
+
+            val notification = JSONObject()
+            val notifcationBody = JSONObject()
+
+            try {
+                notifcationBody.put("title", "Enter_title")
+                notifcationBody.put("message", "binding.msg.text")   //Enter your notification message
+                notification.put("to", topic)
+                notification.put("data", notifcationBody)
+                Log.e("TAG", "try")
+            } catch (e: JSONException) {
+                Log.e("TAG", "onCreate: " + e.message)
+            }
+
+            sendNotification(notification)
         }
 
     }

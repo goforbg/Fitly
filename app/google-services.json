@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "121138227131",
+    "firebase_url": "https://fitly-ebce7.firebaseio.com",
+    "project_id": "fitly-ebce7",
+    "storage_bucket": "fitly-ebce7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121138227131:android:c89a9d7c595ed43e16069e",
+        "android_client_info": {
+          "package_name": "com.androar.fitly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121138227131-oed6qcg5unh320qtt1ang16f05bhqtol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiNAPZ0dFg-M3Xq6HV-JqU8SKZ7vkqtjI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121138227131-oed6qcg5unh320qtt1ang16f05bhqtol.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
