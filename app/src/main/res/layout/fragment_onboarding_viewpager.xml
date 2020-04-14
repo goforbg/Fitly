@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vpContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_weight="1"
+        android:id="@+id/vpOnboarding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+       >
+
+    </androidx.viewpager.widget.ViewPager>
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_weight="9"
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        app:tabBackground="@drawable/tab_selector"
+        app:tabGravity="center"
+        android:background="@color/colorPrimary"
+        app:tabIndicatorHeight="0dp"
+        app:tabMaxWidth="60dp"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

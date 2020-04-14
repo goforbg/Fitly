@@ -23,8 +23,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(p0: RemoteMessage?) {
         super.onMessageReceived(p0)
-
-        val intent = Intent(this, MainActivity::class.java)
+        val roomID = p0?.data?.get("message")
+        val intent = Intent(this, VideoCallActivity::class.java)
+        intent.putExtra("roomID", roomID)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random().nextInt(3000)
 

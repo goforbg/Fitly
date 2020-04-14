@@ -91,25 +91,30 @@ class MainActivity : AppCompatActivity() {
         }
 
         val bg = findViewById<TextView>(R.id.tvBG)
+//        bg.setOnClickListener {
+//            val intent = Intent(this, VideoCallActivity::class.java)
+//            intent.putExtra("roomID", "test")
+//            startActivity(intent)
+//            val topic = "/topics/bg" //topic has to match what the receiver subscribed to
+//            val notification = JSONObject()
+//            val notifcationBody = JSONObject()
+//
+//            try {
+//                notifcationBody.put("title", "Enter_title")
+//                notifcationBody.put("message", "test")   //Enter your notification message
+//                notification.put("to", topic)
+//                notification.put("roomID","test")
+//                notification.put("data", notifcationBody)
+//                Log.e("TAG", "try")
+//            } catch (e: JSONException) {
+//                Log.e("TAG", "onCreate: " + e.message)
+//            }
+//
+//            sendNotification(notification)
+//        }
         bg.setOnClickListener {
-            val topic = "/topics/bg" //topic has to match what the receiver subscribed to
-
-            val notification = JSONObject()
-            val notifcationBody = JSONObject()
-
-            try {
-                notifcationBody.put("title", "Enter_title")
-                notifcationBody.put("message", "binding.msg.text")   //Enter your notification message
-                notification.put("to", topic)
-                notification.put("data", notifcationBody)
-                Log.e("TAG", "try")
-            } catch (e: JSONException) {
-                Log.e("TAG", "onCreate: " + e.message)
-            }
-
-            sendNotification(notification)
+            startActivity(Intent(this, OnboardingActivity::class.java))
         }
-
     }
 
     fun checkSelfPermission(permission: String?, requestCode: Int): Boolean {

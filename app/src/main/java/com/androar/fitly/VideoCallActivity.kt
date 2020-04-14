@@ -25,6 +25,7 @@ class VideoCallActivity : AppCompatActivity() {
     private val PERMISSION_REQ_ID = 22
     private val REQUESTED_PERMISSIONS = arrayOf<String>(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA)
     private val LOG_TAG = VideoCallActivity::class.java.simpleName
+    var roomID = "124"
 
     private val mRtcEventHandler: IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
         override fun onFirstRemoteVideoDecoded(
@@ -56,7 +57,9 @@ class VideoCallActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.androar.fitly.R.layout.activity_videocall)
-
+        if (intent.getStringExtra("roomID") != null) {
+            roomID = intent.getStringExtra("roomID")
+        }
         if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
             checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID)) {
             initAgoraEngine();
@@ -68,8 +71,8 @@ class VideoCallActivity : AppCompatActivity() {
 
 
         mRtcEngine!!.joinChannel(
-            getString(com.androar.fitly.R.string.agora_access_token),
-            "test",
+            getString(com.androar.fitly.R.string.agora_app_id),
+            roomID,
             "Extra Optional Data",
             0
         ) // if you do not specify the uid, Agora will assign one.
