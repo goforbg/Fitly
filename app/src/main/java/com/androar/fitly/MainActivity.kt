@@ -2,6 +2,7 @@ package com.androar.fitly
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -30,6 +31,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Boolean.getBoolean
 
 
 class MainActivity : AppCompatActivity() {
@@ -44,7 +46,6 @@ class MainActivity : AppCompatActivity() {
     private val serverKey =
         "key=" + "AAAAHDRmp7s:APA91bGx8ODUNDSSlCEtCObiYsbXT5DJFQ2f9xVwC-ENiPahArDtyxGDJGEY1bgKMQlLHDTu-hWwWMSzhNmHgLMg31VTRXtHkupNr3f9xRgl4NwH5ssG_NaqXJmoYGFeIlK3N-xdq_AA"
     private val contentType = "application/json"
-
 
     private val requestQueue: RequestQueue by lazy {
         Volley.newRequestQueue(this.applicationContext)
@@ -91,14 +92,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         val bg = findViewById<TextView>(R.id.tvBG)
-//        bg.setOnClickListener {
-//            val intent = Intent(this, VideoCallActivity::class.java)
-//            intent.putExtra("roomID", "test")
-//            startActivity(intent)
+        bg.setOnClickListener {
+            val intent = Intent(this, VideoCallActivity::class.java)
+            intent.putExtra("roomID", "test")
+            startActivity(intent)
+
+            //Sending notification
 //            val topic = "/topics/bg" //topic has to match what the receiver subscribed to
 //            val notification = JSONObject()
 //            val notifcationBody = JSONObject()
-//
 //            try {
 //                notifcationBody.put("title", "Enter_title")
 //                notifcationBody.put("message", "test")   //Enter your notification message
@@ -111,10 +113,15 @@ class MainActivity : AppCompatActivity() {
 //            }
 //
 //            sendNotification(notification)
-//        }
-        bg.setOnClickListener {
-            startActivity(Intent(this, OnboardingActivity::class.java))
         }
+
+
+        val onboardingSeen = AppPreferences(this).getBoolean(getString(com.androar.fitly.R.string.onboarding_seen), false)
+        if (!onboardingSeen) {
+            startActivity(Intent(this@MainActivity, OnboardingActivity::class.java))
+        }
+
+
     }
 
     fun checkSelfPermission(permission: String?, requestCode: Int): Boolean {

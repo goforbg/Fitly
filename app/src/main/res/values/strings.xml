@@ -2,8 +2,9 @@
     <string name="app_name">Fitly</string>
     <string name="agora_app_id">7e40227a49f14f8389d57b3c1d1f472a</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_preferences">myAppPreference</string>
+    <string name="onboarding_seen">onBoardingSeen</string>
     <!--    <string name="agora_access_token">006f4b928968d274a7f936943441032863cIABXTSWO4UZnBJH7Ju5qxDrSamAFySlQjefMEIG4d+PFVgx+f9gAAAAAEABEVnw0cXyVXgEAAQBxfJVe</string>-->
 
 </resources>

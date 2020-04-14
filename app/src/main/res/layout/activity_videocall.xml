@@ -14,11 +14,97 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_icon" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:fontFamily="sans-serif-light"
+                android:text="Pushups"
+                android:layout_gravity="center"
+                android:layout_marginTop="25dp"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="35dp"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="pushups.json"
+                app:lottie_loop="true" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:padding="5dp"
+                android:layout_gravity="end"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="-180dp"
+                android:indeterminate="false"
+                android:max="60"
+                android:progress="60"
+                android:progressDrawable="@drawable/circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewCount"
+                android:layout_width="wrap_content"
+                android:layout_height="152dp"
+                android:text="45"
+                android:layout_gravity="end"
+                android:textSize="100sp"
+                android:fontFamily="sans-serif-thin"
+                android:layout_marginTop="-174dp"
+                android:layout_marginEnd="55dp"/>
+
+
+            <ImageView
+                android:id="@+id/imageViewSwitch"
+                android:layout_width="49dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="28dp"
+                android:layout_marginStart="-45dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.213"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                app:srcCompat="@drawable/ic_play" />
+
+            <ImageView
+                android:id="@+id/imageViewReset"
+                android:layout_width="58dp"
+                android:layout_height="53dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="-55dp"
+                android:layout_marginStart="45dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.812"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.95"
+                app:srcCompat="@drawable/ic_replay" />
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

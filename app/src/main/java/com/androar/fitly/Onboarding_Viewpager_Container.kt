@@ -1,6 +1,7 @@
 package com.androar.fitly
 
 import android.R
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,7 +31,6 @@ class Onboarding_Viewpager_Container : Fragment() {
         val tabLayout: TabLayout =
             view.findViewById<View>(com.androar.fitly.R.id.tab_layout) as TabLayout
         tabLayout.setupWithViewPager(vpPager, true)
-
 
         return view
     }

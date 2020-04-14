@@ -3,6 +3,7 @@ package com.androar.fitly
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.SurfaceView
 import android.view.View
@@ -17,15 +18,21 @@ import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoCanvas
 import io.agora.rtc.video.VideoEncoderConfiguration
+import kotlinx.android.synthetic.main.activity_videocall.*
 
 
 class VideoCallActivity : AppCompatActivity() {
 
     private var mRtcEngine: RtcEngine? = null
     private val PERMISSION_REQ_ID = 22
-    private val REQUESTED_PERMISSIONS = arrayOf<String>(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA)
+    private val REQUESTED_PERMISSIONS =
+        arrayOf<String>(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA)
     private val LOG_TAG = VideoCallActivity::class.java.simpleName
     var roomID = "124"
+
+    var isRunning = false
+    var timeMil: Long = 0
+    var countDownTimer: CountDownTimer? = null
 
     private val mRtcEventHandler: IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
         override fun onFirstRemoteVideoDecoded(
@@ -61,7 +68,8 @@ class VideoCallActivity : AppCompatActivity() {
             roomID = intent.getStringExtra("roomID")
         }
         if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
-            checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID)) {
+            checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID)
+        ) {
             initAgoraEngine();
         }
 
@@ -80,7 +88,53 @@ class VideoCallActivity : AppCompatActivity() {
         findViewById<ImageView>(com.androar.fitly.R.id.audioBtn).setVisibility(View.VISIBLE) // set the audio button hidden
         findViewById<ImageView>(com.androar.fitly.R.id.leaveBtn).setVisibility(View.VISIBLE) // set the leave button hidden
         findViewById<ImageView>(com.androar.fitly.R.id.videoBtn).setVisibility(View.VISIBLE) // set the video button hidden
+
+        imageViewSwitch.setOnClickListener {
+            if (!isRunning) {
+                startCounting()
+            } else {
+                stopCounting()
+            }
+        }
+
+        imageViewReset.setOnClickListener {
+            stopCounting()
+            isRunning = false
+            imageViewSwitch.setImageResource(R.drawable.ic_play)
+            textViewCount!!.text="" + timeMil / 1000
+            progressBar.progress = timeMil.toInt() / 1000
+            progressBar.max = timeMil.toInt() / 1000
+        }
     }
+
+    private fun stopCounting() {
+        imageViewSwitch.setImageResource(R.drawable.ic_play)
+        isRunning = false
+        countDownTimer!!.cancel()
+
+    }
+
+    private fun startCounting() {
+        val txtInput = "45"
+        val timeInput = txtInput.toLong() * 1000
+        timeMil = timeInput
+        progressBar.max = timeMil.toInt() / 1000
+        imageViewSwitch.setImageResource(R.drawable.ic_stop)
+        isRunning = true
+        countDownTimer = object  : CountDownTimer(timeMil,1000){
+            override fun onFinish() {
+
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                textViewCount.text = Math.round(millisUntilFinished * 0.001f).toString()
+                progressBar.progress = Math.round(millisUntilFinished * 0.001f)
+            }
+        }.start()
+
+        countDownTimer!!.start()
+    }
+
 
     private fun initAgoraEngine() {
         mRtcEngine = try {
@@ -116,7 +170,8 @@ class VideoCallActivity : AppCompatActivity() {
     private fun setupLocalVideoFeed() {
 
         // setup the container for the local user
-        val videoContainer: FrameLayout = findViewById(com.androar.fitly.R.id.floating_video_container)
+        val videoContainer: FrameLayout =
+            findViewById(com.androar.fitly.R.id.floating_video_container)
         val videoSurface = RtcEngine.CreateRendererView(baseContext)
         videoSurface.setZOrderMediaOverlay(true)
         videoContainer.addView(videoSurface)
@@ -164,7 +219,6 @@ class VideoCallActivity : AppCompatActivity() {
         videoSurface.setZOrderMediaOverlay(!btn.isSelected())
         videoSurface.setVisibility(if (btn.isSelected()) View.GONE else View.VISIBLE)
     }
-
 
 
     fun onLeaveChannelClicked(view: View?) {
@@ -235,8 +289,7 @@ class VideoCallActivity : AppCompatActivity() {
                         LOG_TAG,
                         "Need permissions " + Manifest.permission.RECORD_AUDIO.toString() + "/" + Manifest.permission.CAMERA
                     )
-                }
-                else {
+                } else {
                     Log.i(LOG_TAG, "Permission has been granted by user")
                 }
                 // if permission granted, initialize the engine
