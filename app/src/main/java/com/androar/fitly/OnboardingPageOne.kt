@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.FragmentPagerAdapter
 
 /**
  * A simple [Fragment] subclass.
@@ -21,11 +22,7 @@ class OnboardingPageOne : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_onboarding_one, container, false)
 
-        val btnStart = view.findViewById<TextView>(R.id.startButton)
-        btnStart.setOnClickListener {
-            startActivity(Intent(activity!!, SplashActivity::class.java))
-            activity!!.finish()
-        }
+
 
         return view
     }

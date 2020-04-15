@@ -2,10 +2,12 @@ package com.androar.fitly
 
 import android.R
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -32,6 +34,16 @@ class Onboarding_Viewpager_Container : Fragment() {
             view.findViewById<View>(com.androar.fitly.R.id.tab_layout) as TabLayout
         tabLayout.setupWithViewPager(vpPager, true)
 
+        val startButton  = view.findViewById<TextView>(com.androar.fitly.R.id.startButton)
+        startButton.setOnClickListener {
+            if (vpPager.currentItem!=2) {
+                vpPager.arrowScroll(View.FOCUS_RIGHT)
+            }
+            else {
+                startActivity(Intent(activity!!, SplashActivity::class.java))
+                activity!!.finish()
+            }
+        }
         return view
     }
     class MyPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
@@ -53,11 +65,6 @@ class Onboarding_Viewpager_Container : Fragment() {
                 else -> fragment1
             }
 
-        }
-
-        // Returns the page title for the top indicator
-        override fun getPageTitle(position: Int): CharSequence? {
-            return ""
         }
 
         companion object {

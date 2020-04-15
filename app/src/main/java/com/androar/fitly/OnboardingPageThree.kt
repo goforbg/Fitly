@@ -21,12 +21,7 @@ class OnboardingPageThree : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_onboarding_three, container, false)
 
-        val btnStart = view.findViewById<TextView>(R.id.startButton)
-        btnStart.setOnClickListener {
 
-            startActivity(Intent(activity!!, SplashActivity::class.java))
-            activity!!.finish()
-        }
 
         return view
     }
