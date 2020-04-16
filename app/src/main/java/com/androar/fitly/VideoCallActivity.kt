@@ -13,12 +13,23 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import io.agora.rtc.Constants
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoCanvas
 import io.agora.rtc.video.VideoEncoderConfiguration
 import kotlinx.android.synthetic.main.activity_videocall.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLSession
 
 
 class VideoCallActivity : AppCompatActivity() {
@@ -78,13 +89,47 @@ class VideoCallActivity : AppCompatActivity() {
         findViewById<ImageView>(com.androar.fitly.R.id.videoBtn).setVisibility(View.GONE); // set the video button hidden
 
 
-        mRtcEngine!!.joinChannel(
-            getString(com.androar.fitly.R.string.agora_app_id),
-            roomID,
-            "Extra Optional Data",
-            0
-        ) // if you do not specify the uid, Agora will assign one.
-        setupLocalVideoFeed()
+        HttpsURLConnection.setDefaultHostnameVerifier(object : HostnameVerifier {
+            override fun verify(hostname: String, session: SSLSession?): Boolean {
+                return hostname == "https://androar.heroku.com"
+            }
+        })
+
+        var token = getString(com.androar.fitly.R.string.agora_app_id)
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://androar.herokuapp.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+
+        val api = retrofit.create(Api::class.java)
+        val call = api.getToken(roomID, "123")
+        call!!.enqueue(object : Callback<JsonObject> {
+            override fun onResponse(
+                call: Call<JsonObject>,
+                response: Response<JsonObject>
+            ) {
+                token = response.body().toString()
+                token = token.substring(10, 125)
+                mRtcEngine!!.joinChannel(
+                    token,
+                    roomID,
+                    "Extra Optional Data",
+                    123
+                ) // if you do not specify the uid, Agora will assign one.
+                setupLocalVideoFeed()
+            }
+
+
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Log.d("RetrofitTest", t.toString())
+                Toast.makeText(applicationContext, "Your internet went Yowza!", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+
+
         findViewById<ImageView>(com.androar.fitly.R.id.audioBtn).setVisibility(View.VISIBLE) // set the audio button hidden
         findViewById<ImageView>(com.androar.fitly.R.id.leaveBtn).setVisibility(View.VISIBLE) // set the leave button hidden
         findViewById<ImageView>(com.androar.fitly.R.id.videoBtn).setVisibility(View.VISIBLE) // set the video button hidden
