@@ -130,13 +130,6 @@ class MainActivity : AppCompatActivity() {
 
         videoSetup()
 
-        val videoChatBtn = findViewById<ImageView>(R.id.videoChatBtn)
-        val bottomSheet = findViewById<NestedScrollView>(R.id.bottom_sheet)
-        videoChatBtn.setOnClickListener {
-            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-            bottomSheetBehavior.setPeekHeight(170);
-
-        }
     }
 
     fun videoSetup() {
