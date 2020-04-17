@@ -12,18 +12,28 @@ import android.provider.CallLog
 import android.provider.CallLog.Calls.*
 import android.provider.ContactsContract
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SnapHelper
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
+import com.master.exoplayer.MasterExoPlayerHelper
+import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -91,13 +101,10 @@ class MainActivity : AppCompatActivity() {
             showContacts();
         }
 
-        val bg = findViewById<TextView>(R.id.tvBG)
-        bg.setOnClickListener {
-            val intent = Intent(this, VideoCallActivity::class.java)
-            intent.putExtra("roomID", "test")
-            startActivity(intent)
 
-            //Sending notification
+
+
+            //Sending notification using Firebase
 //            val topic = "/topics/bg" //topic has to match what the receiver subscribed to
 //            val notification = JSONObject()
 //            val notifcationBody = JSONObject()
@@ -113,7 +120,7 @@ class MainActivity : AppCompatActivity() {
 //            }
 //
 //            sendNotification(notification)
-        }
+
 
 
         val onboardingSeen = AppPreferences(this).getBoolean(getString(com.androar.fitly.R.string.onboarding_seen), false)
@@ -121,7 +128,41 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this@MainActivity, OnboardingActivity::class.java))
         }
 
+        videoSetup()
 
+        val videoChatBtn = findViewById<ImageView>(R.id.videoChatBtn)
+        val bottomSheet = findViewById<NestedScrollView>(R.id.bottom_sheet)
+        videoChatBtn.setOnClickListener {
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+            bottomSheetBehavior.setPeekHeight(170);
+
+        }
+    }
+
+    fun videoSetup() {
+        var videosList : ArrayList<String> = arrayListOf()
+        videosList.add("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
+        videosList.add("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
+
+        val recyclerView = findViewById<RecyclerView>(R.id.rvVideos)
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.orientation = RecyclerView.HORIZONTAL
+        recyclerView.layoutManager = linearLayoutManager
+
+        val helper: SnapHelper = PagerSnapHelper()
+        helper.attachToRecyclerView(recyclerView)
+
+        val masterExoPlayerHelper = MasterExoPlayerHelper(this, id = R.id.videoView, autoPlay = true)
+        masterExoPlayerHelper.makeLifeCycleAware(this)
+        masterExoPlayerHelper.attachToRecyclerView(recyclerView)
+
+        //Used to customize attributes
+        masterExoPlayerHelper.getPlayerView().apply {
+            resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+        }
+
+        val adapter = RecyclerVideoAdapter(videosList)
+        recyclerView.adapter = adapter
     }
 
     fun checkSelfPermission(permission: String?, requestCode: Int): Boolean {
@@ -173,6 +214,8 @@ class MainActivity : AppCompatActivity() {
             CallLog.Calls.DATE + " DESC"
         )
         var name: String = "Your friend"
+        contactModelArrayList.add(PhoneListClass("Your Trainer","OG"))
+
         while (phones!!.moveToNext()) {
             val phoneNumber = phones.getString(phones.getColumnIndex(CallLog.Calls.NUMBER))
             try {
@@ -181,7 +224,6 @@ class MainActivity : AppCompatActivity() {
                 Log.e("Phone log error", e.message.toString())
                 name = "Your friend"
             }
-
 
             val contactModel = PhoneListClass(name, phoneNumber)
             if (!contactModelArrayList!!.contains(contactModel) && !name.equals("")) {
@@ -196,29 +238,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun contactExists(number: String?): Boolean {
-        /// number is the phone number
-        val lookupUri = Uri.withAppendedPath(
-            ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
-            Uri.encode(number)
-        )
-        val mPhoneNumberProjection =
-            arrayOf<String>(
-                ContactsContract.PhoneLookup._ID,
-                ContactsContract.PhoneLookup.NUMBER,
-                ContactsContract.PhoneLookup.DISPLAY_NAME
-            )
-        val cur: Cursor? =
-            contentResolver.query(lookupUri, mPhoneNumberProjection, null, null, null)
-        try {
-            if (cur!!.moveToFirst()) {
-                return true
-            }
-        } finally {
-            cur?.close()
-        }
-        return false
-    }
 
 
     private fun populateActivities() {

@@ -13,7 +13,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(com.androar.fitly.R.layout.activity_splash)
 
         Handler().postDelayed(Runnable { // This method will be executed once the timer is over
-            val i = Intent(this@SplashActivity, VideoPlayerActivity::class.java)
+            val i = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(i)
             finish()
         }, 500)

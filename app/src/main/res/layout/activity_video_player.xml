@@ -1,4 +1,3 @@
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,24 +6,24 @@
     tools:context=".VideoPlayerActivity">
 
 
-<androidx.recyclerview.widget.RecyclerView
-        android:clipToPadding="false"
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvVideos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/bottom_sheet"
-        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:orientation="vertical"
         app:behavior_hideable="true"
         app:behavior_peekHeight="150dp"
@@ -37,7 +36,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
     </LinearLayout>
 
