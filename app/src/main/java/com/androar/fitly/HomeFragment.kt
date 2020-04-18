@@ -41,14 +41,12 @@ class HomeFragment : Fragment() {
 
 
     private val PERMISSION_REQ_ID = 27
-    private val REQUESTED_PERMISSIONS =
-        arrayOf<String>(Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS)
+    private val REQUESTED_PERMISSIONS = arrayOf<String>(Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS)
     private val LOG_TAG = MainActivity::class.java.simpleName
     var selectUsers: ArrayList<ContactsContract.Contacts>? = null
     var phones: Cursor? = null
     private val FCM_API = "https://fcm.googleapis.com/fcm/send"
-    private val serverKey =
-        "key=" + "AAAAHDRmp7s:APA91bGx8ODUNDSSlCEtCObiYsbXT5DJFQ2f9xVwC-ENiPahArDtyxGDJGEY1bgKMQlLHDTu-hWwWMSzhNmHgLMg31VTRXtHkupNr3f9xRgl4NwH5ssG_NaqXJmoYGFeIlK3N-xdq_AA"
+    private val serverKey = "key=" + "AAAAHDRmp7s:APA91bGx8ODUNDSSlCEtCObiYsbXT5DJFQ2f9xVwC-ENiPahArDtyxGDJGEY1bgKMQlLHDTu-hWwWMSzhNmHgLMg31VTRXtHkupNr3f9xRgl4NwH5ssG_NaqXJmoYGFeIlK3N-xdq_AA"
     private val contentType = "application/json"
 
     private val requestQueue: RequestQueue by lazy {
@@ -75,8 +73,6 @@ class HomeFragment : Fragment() {
         }
         requestQueue.add(jsonObjectRequest)
     }
-
-
 
     fun videoSetup() {
         var videosList : ArrayList<String> = arrayListOf()
@@ -159,8 +155,7 @@ class HomeFragment : Fragment() {
             CallLog.Calls.DATE + " DESC"
         )
         var name: String = "Your friend"
-        contactModelArrayList.add(PhoneListClass("Your Trainer","OG"))
-
+        contactModelArrayList.add(PhoneListClass("Your Trainer","OG", "Contact"))
         while (phones!!.moveToNext()) {
             val phoneNumber = phones.getString(phones.getColumnIndex(CallLog.Calls.NUMBER))
             try {
@@ -169,12 +164,10 @@ class HomeFragment : Fragment() {
                 Log.e("Phone log error", e.message.toString())
                 name = "Your friend"
             }
-
-            val contactModel = PhoneListClass(name, phoneNumber)
+            val contactModel = PhoneListClass(name, phoneNumber, "Contact")
             if (!contactModelArrayList!!.contains(contactModel) && !name.equals("")) {
                 contactModelArrayList!!.add(contactModel)
             }
-            Log.d("name>>", name + "  " + phoneNumber)
         }
         phones.close()
         val rvContacts = view!!.findViewById(R.id.rvPhoneList) as RecyclerView
@@ -183,13 +176,9 @@ class HomeFragment : Fragment() {
 
     }
 
-
-
     private fun populateActivities() {
         val recyclerView = view!!.findViewById(R.id.rvActivities) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-
-
         val arrayList = ArrayList<RecyclerItemActivities>()
         val retrofit = Retrofit.Builder()
             .baseUrl("https://goforbg.com/")
@@ -243,8 +232,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         loadDummyData()
         populateActivities();
         FirebaseApp.initializeApp(context!!);
@@ -259,9 +246,6 @@ class HomeFragment : Fragment() {
             rvContacts.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
             showContacts();
         }
-
-
-
 
         //Sending notification using Firebase
 //            val topic = "/topics/bg" //topic has to match what the receiver subscribed to
@@ -279,8 +263,6 @@ class HomeFragment : Fragment() {
 //            }
 //
 //            sendNotification(notification)
-
-
 
         val onboardingSeen = AppPreferences(activity).getBoolean(getString(com.androar.fitly.R.string.onboarding_seen), false)
         if (!onboardingSeen) {
