@@ -178,7 +178,7 @@ class HomeFragment : Fragment() {
         }
         phones.close()
         val rvContacts = view!!.findViewById(R.id.rvPhoneList) as RecyclerView
-        val customAdapter = RecyclerPhoneListAdapter(contactModelArrayList!!)
+        val customAdapter = RecyclerPhoneListAdapter(contactModelArrayList!!, null)
         rvContacts!!.adapter = customAdapter
 
     }
@@ -230,7 +230,7 @@ class HomeFragment : Fragment() {
     }
 
     fun loadDummyData() {
-        val recyclerView = view!!.findViewById(R.id.rvActivities) as RecyclerView
+        val recyclerView = view?.findViewById(R.id.rvActivities) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         val arrayList = ArrayList<RecyclerItemActivities>()
         arrayList.add(RecyclerItemActivities("", "", "", "", "", ""))
@@ -240,12 +240,9 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(com.androar.fitly.R.layout.fragment_home, container, false)
 
 
         loadDummyData()
@@ -291,6 +288,15 @@ class HomeFragment : Fragment() {
         }
 
         videoSetup()
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(com.androar.fitly.R.layout.fragment_home, container, false)
+
         return view
     }
 

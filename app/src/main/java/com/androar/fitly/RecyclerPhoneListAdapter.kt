@@ -3,46 +3,68 @@ package com.androar.fitly
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.textclassifier.TextClassifier.TYPE_EMAIL
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 
 
 class RecyclerPhoneListAdapter(
-    val userList: ArrayList<PhoneListClass>
+    @Nullable val userList: ArrayList<PhoneListClass>?,
+    @Nullable val activityList: List<RecyclerItemActivities>?
 ) : RecyclerView.Adapter<RecyclerPhoneListAdapter.ViewHolder>() {
 
     private val limit = 10
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerPhoneListAdapter.ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_phonelist, parent, false)
-        return ViewHolder(v)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecyclerPhoneListAdapter.ViewHolder {
+        if (getItemViewType(viewType) == 0){
+            val v = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_rv_phonelist, parent, false)
+            return ViewHolder(v)
+        } else {
+            val v = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_rv_activities, parent, false)
+            return ViewHolder(v)
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerPhoneListAdapter.ViewHolder, position: Int) {
-        holder.bindItems(userList[position])
+        if (getItemViewType(position) == 0){
+            holder.bindItems(userList!![position])
+        }
+        else {
+            holder.bindItems(activityList!![position])
+        }
     }
 
+
     override fun getItemCount(): Int {
-        if(userList.size > limit){
+        if (userList!!.size > limit) {
             return limit;
-        }
-        else
-        {
+        } else {
             return userList.size
         }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        fun bindItems(item : RecyclerItemActivities) {
+
+        }
+
         fun bindItems(item: PhoneListClass) {
-            val contactName  = itemView.findViewById(R.id.tvContactName) as TextView
+            val contactName = itemView.findViewById(R.id.tvContactName) as TextView
             val contactScore = itemView.findViewById<TextView>(R.id.tvScore)
             contactName.text = item.name
             val contactimage = itemView.findViewById<ImageView>(R.id.userEmoji)
@@ -61,8 +83,7 @@ class RecyclerPhoneListAdapter(
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     intent.putExtra("roomID", "test")
                     itemView.rootView.context.startActivity(intent)
-                }
-                else {
+                } else {
                     try {
                         val i = Intent(Intent.ACTION_VIEW)
                         val invitetext =
@@ -87,4 +108,13 @@ class RecyclerPhoneListAdapter(
             }
         }
     }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (userList!![position].name.equals("Sunni")) {
+            1
+        } else {
+            0
+        }
+    }
+
 }

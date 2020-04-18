@@ -11,9 +11,11 @@ import com.bumptech.glide.Glide
 class RecyclerItemActivitesAdapter (val userList: List<RecyclerItemActivities>) : RecyclerView.Adapter<RecyclerItemActivitesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerItemActivitesAdapter.ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_activities, parent, false)
-        return ViewHolder(v)
+            val v = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_activities, parent, false)
+            return ViewHolder(v)
     }
+
+
 
     override fun onBindViewHolder(holder: RecyclerItemActivitesAdapter.ViewHolder, position: Int) {
         holder.bindItems(userList[position])
