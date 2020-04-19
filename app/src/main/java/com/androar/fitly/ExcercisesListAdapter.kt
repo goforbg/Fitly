@@ -8,16 +8,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class RecyclerItemActivitesAdapter (val userList: List<RecyclerItemActivities>) : RecyclerView.Adapter<RecyclerItemActivitesAdapter.ViewHolder>() {
+class ExcercisesListAdapter (val userList: List<ExcercisesListClass>) : RecyclerView.Adapter<ExcercisesListAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerItemActivitesAdapter.ViewHolder {
-            val v = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_activities, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExcercisesListAdapter.ViewHolder {
+            val v = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_excercises, parent, false)
             return ViewHolder(v)
     }
 
 
 
-    override fun onBindViewHolder(holder: RecyclerItemActivitesAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ExcercisesListAdapter.ViewHolder, position: Int) {
         holder.bindItems(userList[position])
     }
 
@@ -27,7 +27,7 @@ class RecyclerItemActivitesAdapter (val userList: List<RecyclerItemActivities>) 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindItems(item: RecyclerItemActivities) {
+        fun bindItems(item: ExcercisesListClass) {
             val tvActivityURL  = itemView.findViewById(R.id.ivItem) as ImageView
             Glide.with(itemView.rootView.context)
                 .load(item.t)

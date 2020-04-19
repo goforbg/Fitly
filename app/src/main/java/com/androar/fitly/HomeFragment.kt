@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.androar.fitly.Onboarding.OnboardingActivity
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -177,38 +178,38 @@ class HomeFragment : Fragment() {
     }
 
     private fun populateActivities() {
-        val recyclerView = view!!.findViewById(R.id.rvActivities) as RecyclerView
+        val recyclerView = view!!.findViewById(R.id.rvExcercises) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        val arrayList = ArrayList<RecyclerItemActivities>()
+        val excercisesArrayList = ArrayList<ExcercisesListClass>()
         val retrofit = Retrofit.Builder()
             .baseUrl("https://goforbg.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val api = retrofit.create(Api::class.java)
         val call = api.getActivities()
-        call.enqueue(object : Callback<List<RecyclerItemActivities>> {
+        call.enqueue(object : Callback<List<ExcercisesListClass>> {
             override fun onResponse(
-                call: Call<List<RecyclerItemActivities>>,
-                response: Response<List<RecyclerItemActivities>>
+                call: Call<List<ExcercisesListClass>>,
+                response: Response<List<ExcercisesListClass>>
             ) {
-                val activitesList = response.body()!!
-                for (i in activitesList.indices) {
-                    arrayList.add(
-                        RecyclerItemActivities(
-                            activitesList[i].n,
-                            activitesList[i].t,
-                            activitesList[i].i,
-                            activitesList[i].e,
-                            activitesList[i].v,
-                            activitesList[i].d
+                val excercisesList = response.body()!!
+                for (i in excercisesList.indices) {
+                    excercisesArrayList.add(
+                        ExcercisesListClass(
+                            excercisesList[i].n,
+                            excercisesList[i].t,
+                            excercisesList[i].i,
+                            excercisesList[i].e,
+                            excercisesList[i].v,
+                            excercisesList[i].d
                         )
                     )
                 }
-                val adapter = RecyclerItemActivitesAdapter(arrayList)
+                val adapter = ExcercisesListAdapter(excercisesArrayList)
                 recyclerView.adapter = adapter
             }
 
-            override fun onFailure(call: Call<List<RecyclerItemActivities>>, t: Throwable) {
+            override fun onFailure(call: Call<List<ExcercisesListClass>>, t: Throwable) {
                 Log.d("RetrofitTest", t.toString())
 
                 Toast.makeText(context, "Your internet is moo!", Toast.LENGTH_SHORT)
@@ -219,13 +220,13 @@ class HomeFragment : Fragment() {
     }
 
     fun loadDummyData() {
-        val recyclerView = view?.findViewById(R.id.rvActivities) as RecyclerView
+        val recyclerView = view?.findViewById(R.id.rvExcercises) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        val arrayList = ArrayList<RecyclerItemActivities>()
-        arrayList.add(RecyclerItemActivities("", "", "", "", "", ""))
-        arrayList.add(RecyclerItemActivities("", "", "", "", "", ""))
-        arrayList.add(RecyclerItemActivities("", "", "", "", "", ""))
-        val adapter = RecyclerItemActivitesAdapter(arrayList)
+        val excercisesList = ArrayList<ExcercisesListClass>()
+        excercisesList.add(ExcercisesListClass("", "", "", "", "", ""))
+        excercisesList.add(ExcercisesListClass("", "", "", "", "", ""))
+        excercisesList.add(ExcercisesListClass("", "", "", "", "", ""))
+        val adapter = ExcercisesListAdapter(excercisesList)
         recyclerView.adapter = adapter
     }
 

@@ -3,7 +3,7 @@ package com.androar.fitly
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-open class RecyclerItemActivities(@SerializedName("n")  @Expose open var n: String? = null  , @SerializedName("t")@Expose
+open class ExcercisesListClass(@SerializedName("n")  @Expose open var n: String? = null  , @SerializedName("t")@Expose
 open var t: String? = null  , @SerializedName("i") @Expose
 open var i: String? = null  , @SerializedName("e") @Expose
 open var e: String? = null  , @SerializedName("v")@Expose

@@ -1,7 +1,5 @@
-package com.androar.fitly
+package com.androar.fitly.Onboarding
 
-import android.R
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.androar.fitly.Onboarding.OnboardingPageOne
+import com.androar.fitly.Onboarding.OnboardingPageThree
+import com.androar.fitly.Onboarding.OnboardingPageTwo
+import com.androar.fitly.SplashActivity
 import com.google.android.material.tabs.TabLayout
 
 
@@ -27,7 +29,10 @@ class Onboarding_Viewpager_Container : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(com.androar.fitly.R.layout.fragment_onboarding_viewpager, container, false)
         val vpPager = view.findViewById(com.androar.fitly.R.id.vpOnboarding) as ViewPager
-        val adapterViewPager = MyPagerAdapter(activity!!.getSupportFragmentManager())
+        val adapterViewPager =
+            MyPagerAdapter(
+                activity!!.getSupportFragmentManager()
+            )
         vpPager.adapter = adapterViewPager
 
         val tabLayout: TabLayout =

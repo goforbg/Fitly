@@ -10,7 +10,7 @@ import retrofit2.http.*
 interface Api {
 
     @GET("home_activities.json")
-    fun getActivities(): Call<List<RecyclerItemActivities>>
+    fun getActivities(): Call<List<ExcercisesListClass>>
 
     @GET("/access_token?")
     fun getToken(

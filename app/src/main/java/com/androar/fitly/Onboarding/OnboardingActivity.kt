@@ -1,9 +1,10 @@
-package com.androar.fitly
+package com.androar.fitly.Onboarding
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.androar.fitly.AppPreferences
+import com.androar.fitly.Onboarding.Onboarding_Viewpager_Container
+import com.androar.fitly.R
 
 
 class OnboardingActivity : AppCompatActivity() {

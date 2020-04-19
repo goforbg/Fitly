@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerPhoneListAdapter(
     @Nullable val userList: ArrayList<PhoneListClass>?,
-    @Nullable val activityList: List<RecyclerItemActivities>?
+    @Nullable val activityList: List<ExcercisesListClass>?
 ) : RecyclerView.Adapter<RecyclerPhoneListAdapter.ViewHolder>() {
 
     private val limit = 10
@@ -28,24 +28,13 @@ class RecyclerPhoneListAdapter(
         parent: ViewGroup,
         viewType: Int
     ): RecyclerPhoneListAdapter.ViewHolder {
-        if (getItemViewType(viewType) == 0){
             val v = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_rv_phonelist, parent, false)
             return ViewHolder(v)
-        } else {
-            val v = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_rv_activities, parent, false)
-            return ViewHolder(v)
-        }
     }
 
     override fun onBindViewHolder(holder: RecyclerPhoneListAdapter.ViewHolder, position: Int) {
-        if (getItemViewType(position) == 0){
             holder.bindItems(userList!![position])
-        }
-        else {
-            holder.bindItems(activityList!![position])
-        }
     }
 
 
@@ -58,10 +47,6 @@ class RecyclerPhoneListAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        fun bindItems(item : RecyclerItemActivities) {
-
-        }
 
         fun bindItems(item: PhoneListClass) {
             val contactName = itemView.findViewById(R.id.tvContactName) as TextView
@@ -109,12 +94,5 @@ class RecyclerPhoneListAdapter(
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return if (userList!![position].name.equals("Sunni")) {
-            1
-        } else {
-            0
-        }
-    }
 
 }
