@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/ivItem"
-            android:layout_width="133dp"
-            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
             app:srcCompat="@drawable/ic_icon" />
 
 

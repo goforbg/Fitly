@@ -75,31 +75,6 @@ class HomeFragment : Fragment() {
         requestQueue.add(jsonObjectRequest)
     }
 
-    fun videoSetup() {
-        var videosList : ArrayList<String> = arrayListOf()
-        videosList.add("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
-        videosList.add("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
-
-        val recyclerView = view!!.findViewById<RecyclerView>(R.id.rvVideos)
-        val linearLayoutManager = LinearLayoutManager(activity)
-        linearLayoutManager.orientation = RecyclerView.HORIZONTAL
-        recyclerView.layoutManager = linearLayoutManager
-
-        val helper: SnapHelper = PagerSnapHelper()
-        helper.attachToRecyclerView(recyclerView)
-
-        val masterExoPlayerHelper = MasterExoPlayerHelper(context!!, id = R.id.videoView, autoPlay = true)
-        masterExoPlayerHelper.makeLifeCycleAware(this)
-        masterExoPlayerHelper.attachToRecyclerView(recyclerView)
-
-        //Used to customize attributes
-        masterExoPlayerHelper.getPlayerView().apply {
-            resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-        }
-
-        val adapter = RecyclerVideoAdapter(videosList)
-        recyclerView.adapter = adapter
-    }
 
     fun checkSelfPermission(permission: String?, requestCode: Int): Boolean {
         if (ContextCompat.checkSelfPermission(
@@ -156,7 +131,11 @@ class HomeFragment : Fragment() {
             CallLog.Calls.DATE + " DESC"
         )
         var name: String = "Your friend"
-        contactModelArrayList.add(PhoneListClass("Your Trainer","OG", "Contact"))
+        contactModelArrayList.add(PhoneListClass("Your Trainer","OG", "contact"))
+        val excercisesList = ArrayList<ExcercisesListClass>()
+        repeat(3) { excercisesList.add(ExcercisesListClass("", "", "", "", "", "")) }
+        contactModelArrayList.add(PhoneListClass("video","video", "video"))
+
         while (phones!!.moveToNext()) {
             val phoneNumber = phones.getString(phones.getColumnIndex(CallLog.Calls.NUMBER))
             try {
@@ -165,14 +144,14 @@ class HomeFragment : Fragment() {
                 Log.e("Phone log error", e.message.toString())
                 name = "Your friend"
             }
-            val contactModel = PhoneListClass(name, phoneNumber, "Contact")
+            val contactModel = PhoneListClass(name, phoneNumber, "contact")
             if (!contactModelArrayList!!.contains(contactModel) && !name.equals("")) {
                 contactModelArrayList!!.add(contactModel)
             }
         }
         phones.close()
         val rvContacts = view!!.findViewById(R.id.rvPhoneList) as RecyclerView
-        val customAdapter = RecyclerPhoneListAdapter(contactModelArrayList!!, null)
+        val customAdapter = RecyclerHomepageAdapter(activity!!, contactModelArrayList!!, excercisesList)
         rvContacts!!.adapter = customAdapter
 
     }
@@ -223,10 +202,10 @@ class HomeFragment : Fragment() {
         val recyclerView = view?.findViewById(R.id.rvExcercises) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         val excercisesList = ArrayList<ExcercisesListClass>()
-        excercisesList.add(ExcercisesListClass("", "", "", "", "", ""))
-        excercisesList.add(ExcercisesListClass("", "", "", "", "", ""))
-        excercisesList.add(ExcercisesListClass("", "", "", "", "", ""))
-        val adapter = ExcercisesListAdapter(excercisesList)
+        repeat(3) { excercisesList.add(ExcercisesListClass("", "", "", "", "", "")) }
+        val contactModelArrayList = arrayListOf<PhoneListClass>()
+        contactModelArrayList.add(PhoneListClass("video","video", "video"))
+        val adapter = RecyclerHomepageAdapter(activity!!, contactModelArrayList, excercisesList)
         recyclerView.adapter = adapter
     }
 
@@ -269,8 +248,6 @@ class HomeFragment : Fragment() {
         if (!onboardingSeen) {
             startActivity(Intent(activity, OnboardingActivity::class.java))
         }
-
-        videoSetup()
 
     }
 

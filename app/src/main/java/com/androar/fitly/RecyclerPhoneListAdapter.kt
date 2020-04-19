@@ -88,8 +88,6 @@ class RecyclerPhoneListAdapter(
                             .show()
                     }
                 }
-
-
             }
         }
     }
