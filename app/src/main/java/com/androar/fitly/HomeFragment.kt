@@ -132,7 +132,8 @@ class HomeFragment : Fragment() {
         var name: String = "Your friend"
         contactModelArrayList.add(PhoneListClass("Your Trainer","OG", "contact"))
 
-        while (phones!!.moveToNext()) {
+        var count = 0
+        while (phones!!.moveToNext() && count<20) {
             val phoneNumber = phones.getString(phones.getColumnIndex(CallLog.Calls.NUMBER))
             try {
                 name = phones.getString(phones.getColumnIndex(CallLog.Calls.CACHED_NAME))
@@ -144,6 +145,7 @@ class HomeFragment : Fragment() {
             if (!contactModelArrayList!!.contains(contactModel) && !name.equals("")) {
                 contactModelArrayList!!.add(contactModel)
             }
+            count++
         }
         phones.close()
         val rvContacts = view!!.findViewById(R.id.rvPhoneList) as RecyclerView
