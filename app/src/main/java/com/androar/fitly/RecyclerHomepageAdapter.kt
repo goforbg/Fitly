@@ -19,10 +19,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 
 
-class RecyclerHomepageAdapter (
+class RecyclerHomepageAdapter(
     private val context: Context,
     @Nullable internal var list: ArrayList<PhoneListClass>?,
-    @Nullable internal var excercisesList: ArrayList<ExcercisesListClass>?)
+    @Nullable internal var excercisesList: List<ExcercisesListClass>
+)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     internal val VIEW_TYPE_CONTACT = 1

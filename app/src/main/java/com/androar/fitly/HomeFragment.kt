@@ -17,17 +17,13 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SnapHelper
 import com.androar.fitly.Onboarding.OnboardingActivity
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
-import com.master.exoplayer.MasterExoPlayerHelper
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,6 +45,10 @@ class HomeFragment : Fragment() {
     private val FCM_API = "https://fcm.googleapis.com/fcm/send"
     private val serverKey = "key=" + "AAAAHDRmp7s:APA91bGx8ODUNDSSlCEtCObiYsbXT5DJFQ2f9xVwC-ENiPahArDtyxGDJGEY1bgKMQlLHDTu-hWwWMSzhNmHgLMg31VTRXtHkupNr3f9xRgl4NwH5ssG_NaqXJmoYGFeIlK3N-xdq_AA"
     private val contentType = "application/json"
+    var contactModelArrayList = arrayListOf<PhoneListClass>()
+    var excercisesArrayList = ArrayList<ExcercisesListClass>()
+
+
 
     private val requestQueue: RequestQueue by lazy {
         Volley.newRequestQueue(this.context)
@@ -115,7 +115,6 @@ class HomeFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     fun showContacts() {
-        var contactModelArrayList = ArrayList<PhoneListClass>()
         val projection = arrayOf(
             CallLog.Calls.CACHED_NAME,
             CallLog.Calls.NUMBER,
@@ -132,9 +131,6 @@ class HomeFragment : Fragment() {
         )
         var name: String = "Your friend"
         contactModelArrayList.add(PhoneListClass("Your Trainer","OG", "contact"))
-        val excercisesList = ArrayList<ExcercisesListClass>()
-        repeat(3) { excercisesList.add(ExcercisesListClass("", "", "", "", "", "")) }
-        contactModelArrayList.add(PhoneListClass("video","video", "video"))
 
         while (phones!!.moveToNext()) {
             val phoneNumber = phones.getString(phones.getColumnIndex(CallLog.Calls.NUMBER))
@@ -151,15 +147,14 @@ class HomeFragment : Fragment() {
         }
         phones.close()
         val rvContacts = view!!.findViewById(R.id.rvPhoneList) as RecyclerView
-        val customAdapter = RecyclerHomepageAdapter(activity!!, contactModelArrayList!!, excercisesList)
-        rvContacts!!.adapter = customAdapter
+        val recyclerHomepageAdapter = RecyclerHomepageAdapter(activity!!, contactModelArrayList!!, excercisesArrayList)
+        rvContacts!!.adapter = recyclerHomepageAdapter
+        populateActivities(recyclerHomepageAdapter)
+
 
     }
 
-    private fun populateActivities() {
-        val recyclerView = view!!.findViewById(R.id.rvExcercises) as RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        val excercisesArrayList = ArrayList<ExcercisesListClass>()
+    private fun populateActivities(adapter : RecyclerHomepageAdapter) {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://goforbg.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -184,8 +179,8 @@ class HomeFragment : Fragment() {
                         )
                     )
                 }
-                val adapter = ExcercisesListAdapter(excercisesArrayList)
-                recyclerView.adapter = adapter
+                contactModelArrayList.add(0, PhoneListClass("video", "video", "video"))
+                adapter.notifyDataSetChanged()
             }
 
             override fun onFailure(call: Call<List<ExcercisesListClass>>, t: Throwable) {
@@ -198,22 +193,10 @@ class HomeFragment : Fragment() {
 
     }
 
-    fun loadDummyData() {
-        val recyclerView = view?.findViewById(R.id.rvExcercises) as RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        val excercisesList = ArrayList<ExcercisesListClass>()
-        repeat(3) { excercisesList.add(ExcercisesListClass("", "", "", "", "", "")) }
-        val contactModelArrayList = arrayListOf<PhoneListClass>()
-        contactModelArrayList.add(PhoneListClass("video","video", "video"))
-        val adapter = RecyclerHomepageAdapter(activity!!, contactModelArrayList, excercisesList)
-        recyclerView.adapter = adapter
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadDummyData()
-        populateActivities();
+        //loadDummyData()
         FirebaseApp.initializeApp(context!!);
         FirebaseMessaging.getInstance().subscribeToTopic("/topics/bg")
 
