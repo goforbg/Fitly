@@ -24,6 +24,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -133,7 +134,7 @@ class HomeFragment : Fragment() {
         contactModelArrayList.add(PhoneListClass("Your Trainer","OG", "contact"))
 
         var count = 0
-        while (phones!!.moveToNext() && count<20) {
+        while (phones!!.moveToNext() && count<50) {
             val phoneNumber = phones.getString(phones.getColumnIndex(CallLog.Calls.NUMBER))
             try {
                 name = phones.getString(phones.getColumnIndex(CallLog.Calls.CACHED_NAME))

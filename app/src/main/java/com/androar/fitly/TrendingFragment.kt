@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.master.exoplayer.MasterExoPlayerHelper
+import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * Trending fragment that plays trending videos in a Tiktok fashion
@@ -32,6 +33,7 @@ class TrendingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_trending, container, false)
+
 
         var videosList : ArrayList<String> = arrayListOf()
         videosList.add("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")

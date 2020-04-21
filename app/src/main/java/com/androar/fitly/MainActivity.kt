@@ -1,6 +1,7 @@
 package com.androar.fitly
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -20,8 +21,7 @@ class MainActivity : AppCompatActivity() {
         arrayOf("Home", "Trending", "Profile")
 
     val icons =
-        arrayOf(R.drawable.ic_home, R.drawable.ic_trending, R.drawable.ic_profile)
-
+        arrayOf(R.drawable.ic_home_selector, R.drawable.ic_trending_selector, R.drawable.ic_profile_selector)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -119,10 +119,7 @@ class RecyclerHomepageAdapter(
     }
 
     override fun getItemCount(): Int {
-        var size = 1
-        if (list.isNullOrEmpty()) { size = excercisesList!!.size }
-        else size = list!!.size
-        return size
+        return list!!.size
     }
 
     override fun getItemViewType(position: Int): Int {
