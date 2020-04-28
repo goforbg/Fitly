@@ -302,6 +302,7 @@ class VideoCallActivity : AppCompatActivity() {
 
     private fun onRemoteUserLeft() {
         removeVideo(com.androar.fitly.R.id.bg_video_container)
+        finish()
     }
 
 
