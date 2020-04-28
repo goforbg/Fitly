@@ -37,6 +37,15 @@ class MainActivity : AppCompatActivity() {
             }
         ).attach()
 
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (position == 0 ) { toolbar.visibility = View.VISIBLE}
+                else { appBarLayout.setExpanded(true)
+                    toolbar.visibility = View.GONE}
+            }
+        })
+
 
     }
 

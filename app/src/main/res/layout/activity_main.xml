@@ -31,8 +31,7 @@ android:layout_height="match_parent">
         app:tabIndicatorColor="@android:color/white"
         app:tabIndicatorHeight="3dp"
         android:background="@color/colorPrimary"
-        android:elevation="10dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:elevation="10dp"/>
 
 </com.google.android.material.appbar.AppBarLayout>
 
