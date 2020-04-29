@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setSupportActionBar(toolbar)
         val viewPager = findViewById<ViewPager2>(R.id.view_pager)
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
         viewPager.setAdapter(ViewPagerFragmentAdapter(this))
@@ -40,9 +39,7 @@ class MainActivity : AppCompatActivity() {
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (position == 0 ) { toolbar.visibility = View.VISIBLE}
-                else { appBarLayout.setExpanded(true)
-                    toolbar.visibility = View.GONE}
+
             }
         })
 

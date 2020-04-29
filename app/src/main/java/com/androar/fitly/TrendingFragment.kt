@@ -18,22 +18,24 @@ import kotlinx.android.synthetic.main.activity_main.*
  * Trending fragment that plays trending videos in a Tiktok fashion
  */
 class TrendingFragment : Fragment() {
-
+    var firstTimeVisit = true
     lateinit var adapter : RecyclerVideoAdapter
     lateinit var recyclerView : RecyclerView
 
     override fun onResume() {
         super.onResume()
-
-        adapter.notifyDataSetChanged()
+        if (firstTimeVisit) {
+            adapter.notifyDataSetChanged()
+            firstTimeVisit = false
+        }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_trending, container, false)
-
 
         var videosList : ArrayList<String> = arrayListOf()
         videosList.add("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
