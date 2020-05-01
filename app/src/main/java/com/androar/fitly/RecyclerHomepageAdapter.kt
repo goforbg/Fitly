@@ -83,19 +83,31 @@ class RecyclerHomepageAdapter(
         @SuppressLint("ClickableViewAccessibility")
         internal fun bind(position: Int) {
             rvExcercises.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-            rvExcercises.addOnItemTouchListener(object : OnItemTouchListener {
+            val listener = object : OnItemTouchListener {
                 override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                     val action = e.action
-                    when (action) {
-                        MotionEvent.ACTION_MOVE -> rv.parent
-                            .requestDisallowInterceptTouchEvent(true)
+                    if (rvExcercises.canScrollHorizontally(RecyclerView.FOCUS_FORWARD)) {
+                        when (action) {
+                            MotionEvent.ACTION_MOVE -> rv.parent
+                                .requestDisallowInterceptTouchEvent(true)
+                        }
+                        return false
                     }
-                    return false
+                    else {
+                        when (action) {
+                            MotionEvent.ACTION_MOVE -> rv.parent
+                                .requestDisallowInterceptTouchEvent(false)
+                        }
+                        rvExcercises.removeOnItemTouchListener(this)
+                        return true
+                    }
                 }
 
                 override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
                 override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
-            })
+            }
+
+            rvExcercises.addOnItemTouchListener(listener)
 
             val adapter = ExcercisesListAdapter(excercisesList!!)
             rvExcercises.adapter = adapter
