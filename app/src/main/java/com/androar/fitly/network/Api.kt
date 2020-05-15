@@ -1,8 +1,7 @@
-package com.androar.fitly
+package com.androar.fitly.network
 
+import com.androar.fitly.model.ExcercisesListClass
 import com.google.gson.JsonObject
-import okhttp3.Response
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 

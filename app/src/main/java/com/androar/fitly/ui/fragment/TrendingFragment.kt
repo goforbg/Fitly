@@ -1,6 +1,5 @@
-package com.androar.fitly
+package com.androar.fitly.ui.fragment
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,9 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.androar.fitly.R
+import com.androar.fitly.ui.adapter.RecyclerVideoAdapter
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.master.exoplayer.MasterExoPlayerHelper
-import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * Trending fragment that plays trending videos in a Tiktok fashion

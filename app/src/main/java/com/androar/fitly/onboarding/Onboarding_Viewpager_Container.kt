@@ -1,4 +1,4 @@
-package com.androar.fitly.Onboarding
+package com.androar.fitly.onboarding
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,15 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.androar.fitly.Onboarding.OnboardingPageOne
-import com.androar.fitly.Onboarding.OnboardingPageThree
-import com.androar.fitly.Onboarding.OnboardingPageTwo
-import com.androar.fitly.SplashActivity
+import com.androar.fitly.ui.activity.SplashActivity
 import com.google.android.material.tabs.TabLayout
 
 
 /**
- * A simple [Fragment] subclass.
+ * A simple Viewpager container for swiping onboarding pages
  */
 class Onboarding_Viewpager_Container : Fragment() {
 

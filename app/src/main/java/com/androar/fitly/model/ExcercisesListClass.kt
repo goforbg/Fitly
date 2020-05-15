@@ -1,4 +1,4 @@
-package com.androar.fitly
+package com.androar.fitly.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

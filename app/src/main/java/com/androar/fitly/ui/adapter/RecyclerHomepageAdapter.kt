@@ -1,4 +1,4 @@
-package com.androar.fitly
+package com.androar.fitly.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,6 +17,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
+import com.androar.fitly.R
+import com.androar.fitly.ui.activity.VideoCallActivity
+import com.androar.fitly.model.ExcercisesListClass
+import com.androar.fitly.model.PhoneListClass
 
 
 class RecyclerHomepageAdapter(
@@ -109,7 +113,8 @@ class RecyclerHomepageAdapter(
 
             rvExcercises.addOnItemTouchListener(listener)
 
-            val adapter = ExcercisesListAdapter(excercisesList!!)
+            val adapter =
+                ExcercisesListAdapter(excercisesList!!)
             rvExcercises.adapter = adapter
 
         }

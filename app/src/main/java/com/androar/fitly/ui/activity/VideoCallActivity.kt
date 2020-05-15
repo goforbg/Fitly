@@ -1,4 +1,4 @@
-package com.androar.fitly
+package com.androar.fitly.ui.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -13,15 +13,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.androar.fitly.network.Api
+import com.androar.fitly.R
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import io.agora.rtc.Constants
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoCanvas
 import io.agora.rtc.video.VideoEncoderConfiguration
 import kotlinx.android.synthetic.main.activity_videocall.*
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -74,7 +74,7 @@ class VideoCallActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.androar.fitly.R.layout.activity_videocall)
+        setContentView(R.layout.activity_videocall)
         if (intent.getStringExtra("roomID") != null) {
             roomID = intent.getStringExtra("roomID")
         }
@@ -84,9 +84,9 @@ class VideoCallActivity : AppCompatActivity() {
             initAgoraEngine();
         }
 
-        findViewById<ImageView>(com.androar.fitly.R.id.audioBtn).setVisibility(View.GONE); // set the audio button hidden
-        findViewById<ImageView>(com.androar.fitly.R.id.leaveBtn).setVisibility(View.GONE); // set the leave button hidden
-        findViewById<ImageView>(com.androar.fitly.R.id.videoBtn).setVisibility(View.GONE); // set the video button hidden
+        findViewById<ImageView>(R.id.audioBtn).setVisibility(View.GONE); // set the audio button hidden
+        findViewById<ImageView>(R.id.leaveBtn).setVisibility(View.GONE); // set the leave button hidden
+        findViewById<ImageView>(R.id.videoBtn).setVisibility(View.GONE); // set the video button hidden
 
 
         HttpsURLConnection.setDefaultHostnameVerifier(object : HostnameVerifier {
@@ -95,7 +95,7 @@ class VideoCallActivity : AppCompatActivity() {
             }
         })
 
-        var token = getString(com.androar.fitly.R.string.agora_app_id)
+        var token = getString(R.string.agora_app_id)
         val retrofit = Retrofit.Builder()
             .baseUrl("https://androar.herokuapp.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -130,9 +130,9 @@ class VideoCallActivity : AppCompatActivity() {
         })
 
 
-        findViewById<ImageView>(com.androar.fitly.R.id.audioBtn).setVisibility(View.VISIBLE) // set the audio button hidden
-        findViewById<ImageView>(com.androar.fitly.R.id.leaveBtn).setVisibility(View.VISIBLE) // set the leave button hidden
-        findViewById<ImageView>(com.androar.fitly.R.id.videoBtn).setVisibility(View.VISIBLE) // set the video button hidden
+        findViewById<ImageView>(R.id.audioBtn).setVisibility(View.VISIBLE) // set the audio button hidden
+        findViewById<ImageView>(R.id.leaveBtn).setVisibility(View.VISIBLE) // set the leave button hidden
+        findViewById<ImageView>(R.id.videoBtn).setVisibility(View.VISIBLE) // set the video button hidden
 
         imageViewSwitch.setOnClickListener {
             if (!isRunning) {
@@ -185,7 +185,7 @@ class VideoCallActivity : AppCompatActivity() {
         mRtcEngine = try {
             RtcEngine.create(
                 baseContext,
-                getString(com.androar.fitly.R.string.agora_app_id),
+                getString(R.string.agora_app_id),
                 mRtcEventHandler
             )
         } catch (e: Exception) {
@@ -216,7 +216,7 @@ class VideoCallActivity : AppCompatActivity() {
 
         // setup the container for the local user
         val videoContainer: FrameLayout =
-            findViewById(com.androar.fitly.R.id.floating_video_container)
+            findViewById(R.id.floating_video_container)
         val videoSurface = RtcEngine.CreateRendererView(baseContext)
         videoSurface.setZOrderMediaOverlay(true)
         videoContainer.addView(videoSurface)
@@ -225,7 +225,7 @@ class VideoCallActivity : AppCompatActivity() {
 
     private fun setupRemoteVideoStream(uid: Int) {
         // setup ui element for the remote stream
-        val videoContainer: FrameLayout = findViewById(com.androar.fitly.R.id.bg_video_container)
+        val videoContainer: FrameLayout = findViewById(R.id.bg_video_container)
         // ignore any new streams that join the session
         if (videoContainer.childCount >= 1) {
             return
@@ -240,10 +240,10 @@ class VideoCallActivity : AppCompatActivity() {
         val btn: ImageView = view as ImageView
         if (btn.isSelected()) {
             btn.setSelected(false)
-            btn.setImageResource(com.androar.fitly.R.drawable.audio_toggle_btn)
+            btn.setImageResource(R.drawable.audio_toggle_btn)
         } else {
             btn.setSelected(true)
-            btn.setImageResource(com.androar.fitly.R.drawable.audio_toggle_active_btn)
+            btn.setImageResource(R.drawable.audio_toggle_active_btn)
         }
         mRtcEngine!!.muteLocalAudioStream(btn.isSelected())
     }
@@ -252,13 +252,13 @@ class VideoCallActivity : AppCompatActivity() {
         val btn: ImageView = view as ImageView
         if (btn.isSelected()) {
             btn.setSelected(false)
-            btn.setImageResource(com.androar.fitly.R.drawable.video_toggle_btn)
+            btn.setImageResource(R.drawable.video_toggle_btn)
         } else {
             btn.setSelected(true)
-            btn.setImageResource(com.androar.fitly.R.drawable.video_toggle_active_btn)
+            btn.setImageResource(R.drawable.video_toggle_active_btn)
         }
         mRtcEngine!!.muteLocalVideoStream(btn.isSelected())
-        val container: FrameLayout = findViewById(com.androar.fitly.R.id.floating_video_container)
+        val container: FrameLayout = findViewById(R.id.floating_video_container)
         container.setVisibility(if (btn.isSelected()) View.GONE else View.VISIBLE)
         val videoSurface = container.getChildAt(0) as SurfaceView
         videoSurface.setZOrderMediaOverlay(!btn.isSelected())
@@ -268,8 +268,8 @@ class VideoCallActivity : AppCompatActivity() {
 
     fun onLeaveChannelClicked(view: View?) {
         leaveChannel()
-        removeVideo(com.androar.fitly.R.id.floating_video_container)
-        removeVideo(com.androar.fitly.R.id.bg_video_container)
+        removeVideo(R.id.floating_video_container)
+        removeVideo(R.id.bg_video_container)
         finish()
     }
 
@@ -283,14 +283,14 @@ class VideoCallActivity : AppCompatActivity() {
     }
 
     private fun onRemoteUserVideoToggle(uid: Int, toggle: Boolean) {
-        val videoContainer: FrameLayout = findViewById(com.androar.fitly.R.id.bg_video_container)
+        val videoContainer: FrameLayout = findViewById(R.id.bg_video_container)
         val videoSurface = videoContainer.getChildAt(0) as SurfaceView
         videoSurface.setVisibility(if (toggle) View.GONE else View.VISIBLE)
 
         // add an icon to let the other user know remote video has been disabled
         if (toggle) {
             val noCamera = ImageView(this)
-            noCamera.setImageResource(com.androar.fitly.R.drawable.video_disabled)
+            noCamera.setImageResource(R.drawable.video_disabled)
             videoContainer.addView(noCamera)
         } else {
             val noCamera: ImageView = videoContainer.getChildAt(1) as ImageView
@@ -301,7 +301,7 @@ class VideoCallActivity : AppCompatActivity() {
     }
 
     private fun onRemoteUserLeft() {
-        removeVideo(com.androar.fitly.R.id.bg_video_container)
+        removeVideo(R.id.bg_video_container)
         finish()
     }
 

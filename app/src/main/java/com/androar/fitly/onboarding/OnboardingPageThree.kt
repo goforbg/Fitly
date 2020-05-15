@@ -1,4 +1,4 @@
-package com.androar.fitly.Onboarding
+package com.androar.fitly.onboarding
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

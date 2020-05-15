@@ -1,4 +1,4 @@
-package com.androar.fitly
+package com.androar.fitly.ui.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -18,13 +18,19 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.androar.fitly.Onboarding.OnboardingActivity
+import com.androar.fitly.network.Api
+import com.androar.fitly.R
+import com.androar.fitly.ui.adapter.RecyclerHomepageAdapter
+import com.androar.fitly.model.ExcercisesListClass
+import com.androar.fitly.model.PhoneListClass
+import com.androar.fitly.onboarding.OnboardingActivity
+import com.androar.fitly.ui.activity.MainActivity
+import com.androar.fitly.util.AppPreferences
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -131,7 +137,13 @@ class HomeFragment : Fragment() {
             CallLog.Calls.DATE + " DESC"
         )
         var name: String = "Your friend"
-        contactModelArrayList.add(PhoneListClass("Your Trainer","OG", "contact"))
+        contactModelArrayList.add(
+            PhoneListClass(
+                "Your Trainer",
+                "OG",
+                "contact"
+            )
+        )
 
         var count = 0
         while (phones!!.moveToNext() && count<50) {
@@ -142,7 +154,11 @@ class HomeFragment : Fragment() {
                 Log.e("Phone log error", e.message.toString())
                 name = "Your friend"
             }
-            val contactModel = PhoneListClass(name, phoneNumber, "contact")
+            val contactModel = PhoneListClass(
+                name,
+                phoneNumber,
+                "contact"
+            )
             if (!contactModelArrayList!!.contains(contactModel) && !name.equals("")) {
                 contactModelArrayList!!.add(contactModel)
             }
@@ -150,7 +166,12 @@ class HomeFragment : Fragment() {
         }
         phones.close()
         val rvContacts = view!!.findViewById(R.id.rvPhoneList) as RecyclerView
-        val recyclerHomepageAdapter = RecyclerHomepageAdapter(activity!!, contactModelArrayList!!, excercisesArrayList)
+        val recyclerHomepageAdapter =
+            RecyclerHomepageAdapter(
+                activity!!,
+                contactModelArrayList!!,
+                excercisesArrayList
+            )
         rvContacts!!.adapter = recyclerHomepageAdapter
         populateActivities(recyclerHomepageAdapter)
 
@@ -182,7 +203,13 @@ class HomeFragment : Fragment() {
                         )
                     )
                 }
-                contactModelArrayList.add(0, PhoneListClass("video", "video", "video"))
+                contactModelArrayList.add(0,
+                    PhoneListClass(
+                        "video",
+                        "video",
+                        "video"
+                    )
+                )
                 adapter.notifyDataSetChanged()
             }
 
@@ -230,7 +257,8 @@ class HomeFragment : Fragment() {
 //
 //            sendNotification(notification)
 
-        val onboardingSeen = AppPreferences(activity).getBoolean(getString(com.androar.fitly.R.string.onboarding_seen), false)
+        val onboardingSeen = AppPreferences(activity)
+            .getBoolean(getString(R.string.onboarding_seen), false)
         if (!onboardingSeen) {
             startActivity(Intent(activity, OnboardingActivity::class.java))
         }
@@ -241,7 +269,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(com.androar.fitly.R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         return view
     }

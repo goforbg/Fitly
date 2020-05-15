@@ -1,10 +1,9 @@
-package com.androar.fitly
-import android.net.Uri
+package com.androar.fitly.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
+import com.androar.fitly.R
 import com.master.exoplayer.MasterExoPlayer
 
 
@@ -15,12 +14,12 @@ class RecyclerVideoAdapter(
     private val limit = 10
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerVideoAdapter.ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(com.androar.fitly.R.layout.item_rv_videos, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_videos, parent, false)
         return ViewHolder(v)
     }
 
-    override fun onBindViewHolder(holder: RecyclerVideoAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItems(videosList[position])
     }
 
@@ -38,7 +37,7 @@ class RecyclerVideoAdapter(
 
         fun bindItems(item: String) {
 
-            val videoView = itemView.findViewById<MasterExoPlayer>(com.androar.fitly.R.id.videoView)
+            val videoView = itemView.findViewById<MasterExoPlayer>(R.id.videoView)
             videoView.url = item
             videoView.requestFocus()
         }

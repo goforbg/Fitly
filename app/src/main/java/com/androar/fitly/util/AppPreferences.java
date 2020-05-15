@@ -1,4 +1,4 @@
-package com.androar.fitly;
+package com.androar.fitly.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
